@@ -30,10 +30,15 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import ElementNotInteractableException, NoSuchElementException, StaleElementReferenceException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from random import randint, randrange
 import time
 
-website_url = "get url you're gonna use David"
+# website_url = "https://www.amazon.com/gp/product/B0787DSQY6/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1"
+website_url = "https://www.amazon.com/gp/product/B08FC5L3RG?tag=georiot-us-default-20&ascsubtag=grd-us-1031267595462810100-20&geniuslink=true"
+
 test_url = ""
 waitTime = 7
 priceLimit = 500
@@ -81,12 +86,13 @@ class DavidShop:
     def findProduct(self):
         driver = self.driver
         driver.get(website_url)
-        time.sleep(randint(int(waitTime/2), waitTime))
+        #time.sleep(randint(int(waitTime/2), waitTime))
 
         isAvailable = self.isProductAvailable()
         if isAvailable == 'Currently unavailable':
             time.sleep(randint(int(waitTime/2), waitTime))
             self.findProduct()
+            
         elif isAvailable <= priceLimit:
             buy_now = driver.find_elemnt_by_name("but button")
             buy_now.click()
@@ -103,13 +109,18 @@ class DavidShop:
 
     def isProductAvailable(self):
         driver = self.driver
-        available = driver.find_element_by_class_name("find availabilty by class name")
-        if available == 'Currently Unavailable':
-            print(f'AVAILABLE: {available}')
-            return available
-        else:
-            print(f'PRICE: {available}')
-            return float(available[1:])
+        try:
+            btn = WebDriverWait(driver, 3).until(
+                EC.presence_of_element_located((By.ID, "buy-now-button"))
+                #submit.buy-now
+                #buy-now-button
+            )
+        except:
+            print('There has been an error thrown...couldnt find element')
+            btn = 'Currently Unavailable'
+        
+        return btn
+        
 
     def closeBrowser(self):
         self.driver.close()
