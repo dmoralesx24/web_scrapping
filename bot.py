@@ -35,8 +35,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from random import randint, randrange
 import time
+from dotenv import dotenv_values
 
-# website_url = "https://www.amazon.com/gp/product/B0787DSQY6/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1"
+# website_url = "https://www.amazon.com/dp/B07YQM3NLM/ref=cm_gf_abas_iaac_d_p0_qd0_w036HymCsPR6CExNdRLs"
 website_url = "https://www.amazon.com/gp/product/B08FC5L3RG?tag=georiot-us-default-20&ascsubtag=grd-us-1031267595462810100-20&geniuslink=true"
 
 test_url = ""
@@ -57,76 +58,92 @@ class DavidShop:
         self.options.binary = self.binary
         self.options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
         self.driver = webdriver.Firefox(executable_path=r'./geckodriver.exe', options=self.options)
+        
 
     def signIn(self):
         driver = self.driver
 
         ##enter username
         username_elem = driver.find_element_by_xpath("//input[@name='email']")
+
         username_elem.clear()
         #possibly fake typing here
         username_elem.send_keys(self.username)
 
-        time.sleep(randint(int(waitTime/2), waitTime))
+        # time.sleep(randint(int(waitTime/1), waitTime))
 
-        username_elem.send_key(Keys.RETURN)
+        username_elem.send_keys(Keys.ENTER)
 
-        time.sleep(randint(int(waitTime/2), waitTime))
+        time.sleep(randint(int(waitTime/1), waitTime))
+
 
         ## enter password
+        # password_elem = self.webDriverWait(1, 'xpath', "//input[@name='password']")
         password_elem = driver.find_element_by_xpath("//input[@name='password']")
+
         password_elem.clear()
         #possibly fake typing here
         password_elem.send_keys(self.password)
 
-        time.sleep(randint(int(waitTime/2), waitTime))
+        # time.sleep(randint(int(waitTime/1), waitTime))
 
-        password_elem.send_key(Keys.RETURN)
+        password_elem.send_keys(Keys.ENTER)
 
     def findProduct(self):
         driver = self.driver
         driver.get(website_url)
-        #time.sleep(randint(int(waitTime/2), waitTime))
+        time.sleep(randint(int(waitTime/1), waitTime))
 
-        isAvailable = self.isProductAvailable()
-        if isAvailable == 'Currently unavailable':
-            time.sleep(randint(int(waitTime/2), waitTime))
+        btn = self.isProductAvailable()
+        if btn == 'Currently Unavailable':
+            # time.sleep(randint(int(waitTime/1), waitTime))
             self.findProduct()
-            
-        elif isAvailable <= priceLimit:
-            buy_now = driver.find_elemnt_by_name("but button")
-            buy_now.click()
-            time.sleep(randint(int(waitTime/2), waitTime))
+        else: 
+            btn.click()
+            time.sleep(randint(int(waitTime/1), waitTime))
+
             self.signIn()
 
+            time.sleep(randint(int(waitTime/1), waitTime))
+
             place_order = driver.find_element_by_name('place your order html tags')
-            time.sleep(randint(int(waitTime/2), waitTime))
             place_order.click()
-            time.sleep(randint(int(waitTime/2), waitTime))
-        else:
-            time.sleep(randint(int(waitTime/2), waitTime))
-            self.findProduct()
+            time.sleep(randint(int(waitTime/1), waitTime))
+        
 
     def isProductAvailable(self):
         driver = self.driver
+        btn = None
         try:
-            btn = WebDriverWait(driver, 3).until(
+            btn = WebDriverWait(driver, 1).until(
                 EC.presence_of_element_located((By.ID, "buy-now-button"))
-                #submit.buy-now
-                #buy-now-button
             )
         except:
-            print('There has been an error thrown...couldnt find element')
             btn = 'Currently Unavailable'
         
         return btn
         
+    def webDriverWait(self, time, id, name):
+        enumElement = {'id': By.ID, 'classname': By.CLASS_NAME, 'xpath': By.XPATH}
+        driver = self.driver
+        res = {'found': False}
+        try:
+            element = WebDriverWait(driver, time).until(
+                EC.presence_of_element_located((enumElement[id], name)))
+            res['found'] = True
+            res['element'] = element
+        except:
+            print('There has been an error thrown...couldnt find element')
+        
+        return res
 
     def closeBrowser(self):
         self.driver.close()
 
 if __name__ == "__main__":
-    shopBot = DavidShop("username", "password")
+
+    config = dotenv_values('.env')
+    shopBot = DavidShop(config['AMAZON_USERNAME'], config['AMAZON_PASSWORD'])
     shopBot.findProduct()
     shopBot.closeBrowser()
 
