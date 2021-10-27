@@ -27,7 +27,8 @@
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys 
-from selenium.webdriver.firefox.options import Options
+# from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import ElementNotInteractableException, NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
@@ -38,7 +39,11 @@ import time
 from dotenv import dotenv_values
 
 # website_url = "https://www.amazon.com/dp/B07YQM3NLM/ref=cm_gf_abas_iaac_d_p0_qd0_w036HymCsPR6CExNdRLs"
-website_url = "https://www.amazon.com/gp/product/B08FC5L3RG?tag=georiot-us-default-20&ascsubtag=grd-us-1031267595462810100-20&geniuslink=true"
+# todo MICROSOFT OS
+# website_url = "https://www.amazon.com/gp/product/B08FC5L3RG?tag=georiot-us-default-20&ascsubtag=grd-us-1031267595462810100-20&geniuslink=true"
+# todo MACOS
+website_url = "https://www.amazon.com/Sony-Playstation-Disk/dp/B082S2LYV1/ref=sr_1_3?crid=NQFUKMT8FF9R&dchild=1&keywords=playstation+5+console&qid=1635369528&sprefix=plays%2Caps%2C136&sr=8-3"
+
 
 test_url = ""
 waitTime = 7
@@ -50,15 +55,25 @@ class DavidShop:
         self.username = username
         self.password = password
         self.options = Options()
-        self.binary = r'../../Program Files/Mozilla Firefox/firefox.exe'
-        self.options.set_preference("browser.download.folderList",2)
-        self.options.set_preference("browser.download.manager.showWhenStarting", False)
-        self.options.set_preference("browser.download.dir","/Data")
-        self.options.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream,application/vnd.ms-excel")
-        self.options.binary = self.binary
-        self.options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
-        self.driver = webdriver.Firefox(executable_path=r'./geckodriver.exe', options=self.options)
+
+        # todo try to do just chromedriver for both os systems
+
+        # todo MICROSOFT OS
+        # self.binary = r'../../Program Files/Mozilla Firefox/firefox.exe'
+        # self.options.set_preference("browser.download.folderList",2)
+        # self.options.set_preference("browser.download.manager.showWhenStarting", False)
+        # self.options.set_preference("browser.download.dir","/Data")
+        # self.options.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream,application/vnd.ms-excel")
+        # self.options.binary = self.binary
+        # self.options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
         
+        # todo MACOS
+        self.options.add_argument("--window-size=1920x1080")
+        self.options.add_argument("--verbose")
+
+        # self.driver = webdriver.Firefox(executable_path=r'./geckodriver.exe', options=self.options)
+        self.driver = webdriver.Chrome(options=self.options)
+
 
     def signIn(self):
         driver = self.driver
