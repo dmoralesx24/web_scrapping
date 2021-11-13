@@ -38,12 +38,7 @@ from random import randint, randrange
 import time
 from dotenv import dotenv_values
 
-# website_url = "https://www.amazon.com/dp/B07YQM3NLM/ref=cm_gf_abas_iaac_d_p0_qd0_w036HymCsPR6CExNdRLs"
-# todo MICROSOFT OS
-# website_url = "https://www.amazon.com/gp/product/B08FC5L3RG?tag=georiot-us-default-20&ascsubtag=grd-us-1031267595462810100-20&geniuslink=true"
-# todo MACOS
 website_url = "https://www.amazon.com/Sony-Playstation-Disk/dp/B082S2LYV1/ref=sr_1_3?crid=NQFUKMT8FF9R&dchild=1&keywords=playstation+5+console&qid=1635369528&sprefix=plays%2Caps%2C136&sr=8-3"
-
 
 test_url = ""
 waitTime = 7
@@ -55,19 +50,7 @@ class DavidShop:
         self.username = username
         self.password = password
         self.options = Options()
-
-        # todo try to do just chromedriver for both os systems
-
-        # todo MICROSOFT OS
-        # self.binary = r'../../Program Files/Mozilla Firefox/firefox.exe'
-        # self.options.set_preference("browser.download.folderList",2)
-        # self.options.set_preference("browser.download.manager.showWhenStarting", False)
-        # self.options.set_preference("browser.download.dir","/Data")
-        # self.options.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream,application/vnd.ms-excel")
-        # self.options.binary = self.binary
-        # self.options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
         
-        # todo MACOS
         self.options.add_argument("--window-size=1920x1080")
         self.options.add_argument("--verbose")
 
@@ -77,7 +60,6 @@ class DavidShop:
 
     def signIn(self):
         driver = self.driver
-
         ##enter username
         username_elem = driver.find_element_by_xpath("//input[@name='email']")
 
