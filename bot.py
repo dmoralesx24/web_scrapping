@@ -8,23 +8,6 @@
 
 ##change steps to fit specific website checkout routine 
 
-##POSSIBLE WEBSITES TO USE FOR PS5
-##////////////////////////
-#Walmart: PS5 | PS5 Digital Edition (last restock June 17)
-#GameStop: PS5 | PS5 Digital Edition (last restock June 18)
-#Target: PS5 | PS5 Digital Edition (last restock June 16)
-#Sony: PS5 | PS5 Digital Edition (last restock June 17)
-##////////////////////////
-
-##POSSIBLE WEBSITES TO USE FOR Xbox Series X
-##////////////////////////
-#Walmart: PS5 | PS5 Digital Edition (last restock June 17)
-#GameStop: PS5 | PS5 Digital Edition (last restock June 18)
-#Target: PS5 | PS5 Digital Edition (last restock June 16)
-#Microsoft: Xbox Series X | Xbox Series S (last restock June 8)
-##////////////////////////
-
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys 
 # from selenium.webdriver.firefox.options import Options
@@ -38,9 +21,14 @@ from random import randint, randrange
 import time
 from dotenv import dotenv_values
 
-website_url = "https://www.amazon.com/Sony-Playstation-Disk/dp/B082S2LYV1/ref=sr_1_3?crid=NQFUKMT8FF9R&dchild=1&keywords=playstation+5+console&qid=1635369528&sprefix=plays%2Caps%2C136&sr=8-3"
+#REGION PS5 links
+amazon_url = 'https://www.amazon.com/Sony-Playstation-Disk/dp/B082S2LYV1/ref=sr_1_3?crid=NQFUKMT8FF9R&dchild=1&keywords=playstation+5+console&qid=1635369528&sprefix=plays%2Caps%2C136&sr=8-3'
+walmart_url = 'https://www.walmart.com/ip/Sony-PlayStation-5-Video-Game-Console/165545420'
+target_url = 'https://www.target.com/p/playstation-5-console/-/A-81114595?clkid=cf3af1bdN584011ebb49742010a246e3a&lnm=81938&afid=Future%20PLC.&ref=tgt_adv_xasd0002'
+bestbuy_url = 'https://www.bestbuy.com/site/sony-playstation-5-console/6426149.p?skuId=6426149'
+#END REGION
 
-test_url = ""
+website_url = amazon_url
 waitTime = 7
 priceLimit = 500
 
