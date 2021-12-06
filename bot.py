@@ -26,9 +26,10 @@ amazon_url = 'https://www.amazon.com/Sony-Playstation-Disk/dp/B082S2LYV1/ref=sr_
 walmart_url = 'https://www.walmart.com/ip/Sony-PlayStation-5-Video-Game-Console/165545420'
 target_url = 'https://www.target.com/p/playstation-5-console/-/A-81114595?clkid=cf3af1bdN584011ebb49742010a246e3a&lnm=81938&afid=Future%20PLC.&ref=tgt_adv_xasd0002'
 bestbuy_url = 'https://www.bestbuy.com/site/sony-playstation-5-console/6426149.p?skuId=6426149'
+bestbuy_test_url = 'https://www.bestbuy.com/site/asus-11-6-chromebook-intel-celeron-4gb-memory-32gb-emmc-flash-memory-gray-grey/6449513.p?skuId=6449513'
 #END REGION
 
-website_url = amazon_url
+website_url = bestbuy_test_url
 waitTime = 7
 priceLimit = 500
 
@@ -78,30 +79,34 @@ class DavidShop:
         driver = self.driver
         driver.get(website_url)
         time.sleep(randint(int(waitTime/1), waitTime))
-
-        btn = self.isProductAvailable()
+        
+        # NOTE: checks if buy button is available
+        btn = self.isProductAvailable("add-to-cart-button")
         if btn == 'Currently Unavailable':
             # time.sleep(randint(int(waitTime/1), waitTime))
             self.findProduct()
-        else: 
-            btn.click()
-            time.sleep(randint(int(waitTime/1), waitTime))
+         
+        btn.click()
+        time.sleep(randint(int(waitTime/1), waitTime))
+        
+        # NOTE: Looks for cart button    todo: figure out an exit strategy if it doesn't find the button
+        btn2 = self.isProductAvailable("go-to-cart-button")
+        btn2.click()
+        # self.signIn()
 
-            self.signIn()
+        time.sleep(randint(int(waitTime/1), waitTime))
 
-            time.sleep(randint(int(waitTime/1), waitTime))
-
-            place_order = driver.find_element_by_name('place your order html tags')
-            place_order.click()
-            time.sleep(randint(int(waitTime/1), waitTime))
+        place_order = driver.find_element_by_name('place your order html tags')
+        place_order.click()
+        time.sleep(randint(int(waitTime/1), waitTime))
         
 
-    def isProductAvailable(self):
+    def isProductAvailable(self, tagname):
         driver = self.driver
         btn = None
         try:
             btn = WebDriverWait(driver, 1).until(
-                EC.presence_of_element_located((By.ID, "buy-now-button"))
+                EC.presence_of_element_located((By.CLASS_NAME, tagname))
             )
         except:
             btn = 'Currently Unavailable'
