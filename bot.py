@@ -40,9 +40,21 @@ class DavidShop:
         self.password = password
         self.options = Options()
         
+        # self.options.add_argument("./chrome.exe")
         self.options.add_argument("--window-size=1920x1080")
         self.options.add_argument("--verbose")
-
+        # self.options.add_argument('headless')
+        self.options.add_argument('--disable-infobars')
+        self.options.add_argument('--disable-dev-shm-usage')
+        self.options.add_argument('--no-sandbox')
+        self.options.add_argument('--remote-debugging-port=9222')
+        # TODO: need to create a seperate binary location based on operating system running. one for macOS another for WSL.
+        # TODO: also need to make sure chromedriver.exe is updated. may need a different driver for macOS.
+        #
+        # self.options.binary_location = 'C:\Program Files\Google\Chrome\Application\chrome.exe'
+        self.options.binary_location = '/mnt/c/Program Files/Google/Chrome/Application/./chrome.exe'
+        # self.options.binary_location = '/usr/bin/google-chrome /usr/share/man/man1/google-chrome.1.gz'
+        # self.options.
         # self.driver = webdriver.Firefox(executable_path=r'./geckodriver.exe', options=self.options)
         self.driver = webdriver.Chrome(options=self.options)
 
@@ -82,6 +94,7 @@ class DavidShop:
         
         # NOTE: checks if buy button is available
         btn = self.isProductAvailable("add-to-cart-button")
+        print(btn)
         if btn == 'Currently Unavailable':
             # time.sleep(randint(int(waitTime/1), waitTime))
             self.findProduct()
